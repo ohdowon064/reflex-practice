@@ -10,6 +10,9 @@ python = "^3.12"
 reflex = "^0.5.9"
 
 
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.6.3"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
