@@ -1,7 +1,7 @@
 *.db
 *.py[cod]
+.idea/
 .web
 __pycache__/
 assets/external/
 reflex.db
-.idea/
