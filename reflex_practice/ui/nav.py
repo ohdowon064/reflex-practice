@@ -38,6 +38,7 @@ def navbar() -> rx.Component:
                 ),
                 justify="between",
                 align_items="center",
+                id="my-navbar-hstack-desktop",
             ),
         ),
         rx.mobile_and_tablet(
@@ -75,4 +76,5 @@ def navbar() -> rx.Component:
         # top="0px",
         # z_index="5",
         width="100%",
+        id="my-main-nav",
     )
