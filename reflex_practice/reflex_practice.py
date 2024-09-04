@@ -1,5 +1,7 @@
 import reflex as rx
 
+from reflex_practice.pages.about import about_page
+from reflex_practice.pages.pricing import pricing_page
 from reflex_practice.ui.base import base_page
 from rxconfig import config
 
@@ -39,3 +41,5 @@ def index() -> rx.Component:
 
 app = rx.App()
 app.add_page(index)
+app.add_page(about_page, "/about")
+app.add_page(pricing_page, "/pricing")
