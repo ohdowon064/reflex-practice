@@ -19,7 +19,7 @@ def index() -> rx.Component:
         rx.vstack(
             rx.heading(State.label, size="9"),
             rx.text(
-                "Let's build something cool with Reflex!",
+                "Let's build something cool with Reflex! ",
                 rx.code(f"{config.app_name}/{config.app_name}.py"),
                 size="5",
             ),
@@ -28,6 +28,11 @@ def index() -> rx.Component:
                 on_click=State.on_click,
                 on_change=State.on_change,
             ),
+            spacing="5",
+            justify="center",
+            align="center",
+            min_height="85vh",
+            id="my-child",
         )
     )
 

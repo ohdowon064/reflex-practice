@@ -19,9 +19,14 @@ def base_page(
             rx.color_mode.button(position="bottom-left"),
         )
 
-    return rx.container(
+    return rx.fragment(
         navbar(),
-        child,
+        rx.box(
+            child,
+            id="my-content-area",
+            padding="1em",
+            width="100%",
+        ),
         rx.logo(),
         rx.color_mode.button(position="bottom-left", id="light-dark-btn"),
         id="base-container",
