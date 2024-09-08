@@ -1,5 +1,6 @@
 import reflex as rx
 
+from reflex_practice import navigation
 from reflex_practice.pages.about import about_page
 from reflex_practice.pages.pricing import pricing_page
 from reflex_practice.ui.base import base_page
@@ -13,7 +14,7 @@ class State(rx.State):
         self.label = value
 
     def on_click(self):
-        print("label clicked!")
+        return rx.redirect(navigation.routes.ABOUT_ROUTE)
 
 
 def index() -> rx.Component:
@@ -30,6 +31,7 @@ def index() -> rx.Component:
                 on_click=State.on_click,
                 on_change=State.on_change,
             ),
+            rx.link(rx.button("About us"), href=navigation.routes.ABOUT_ROUTE),
             spacing="5",
             justify="center",
             align="center",
@@ -41,5 +43,5 @@ def index() -> rx.Component:
 
 app = rx.App()
 app.add_page(index)
-app.add_page(about_page, "/about")
-app.add_page(pricing_page, "/pricing")
+app.add_page(about_page, navigation.routes.ABOUT_ROUTE)
+app.add_page(pricing_page, navigation.routes.PRICING_ROUTE)
