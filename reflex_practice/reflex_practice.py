@@ -2,6 +2,7 @@ import reflex as rx
 
 from reflex_practice import navigation
 from reflex_practice.pages.about import about_page
+from reflex_practice.pages.contact import contact_page
 from reflex_practice.pages.pricing import pricing_page
 from reflex_practice.ui.base import base_page
 from rxconfig import config
