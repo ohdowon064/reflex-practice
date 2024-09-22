@@ -6,10 +6,17 @@ from reflex_practice.ui.base import base_page
 
 class ContactState(rx.State):
     form_data: dict = {}
+    did_submit: bool = False
 
     def handle_submit(self, form_data: dict):
+        print(form_data)
         self.form_data = form_data
-        print(self.form_data)
+        self.did_submit = True
+
+    @rx.var
+    def thank_you(self):
+        first_name = self.form_data.get("first_name", "")
+        return f"Thank you {first_name}".strip() + "!"
 
 
 @rx.page(route=navigation.routes.CONTACT_ROUTE)
@@ -35,7 +42,6 @@ def contact_page() -> rx.Component:
                 placeholder="Email",
                 name="email",
                 type="email",
-                required=True,
                 width="100%",
             ),
             rx.text_area(
@@ -51,6 +57,11 @@ def contact_page() -> rx.Component:
     )
     my_child = rx.vstack(
         rx.heading("Contact Us", size="9"),
+        rx.cond(
+            ContactState.did_submit,
+            ContactState.thank_you,
+            "",
+        ),
         rx.desktop_only(
             rx.box(
                 my_form,
