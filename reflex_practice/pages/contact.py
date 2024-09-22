@@ -1,3 +1,5 @@
+import asyncio
+
 import reflex as rx
 
 from reflex_practice import navigation
@@ -8,10 +10,14 @@ class ContactState(rx.State):
     form_data: dict = {}
     did_submit: bool = False
 
-    def handle_submit(self, form_data: dict):
+    async def handle_submit(self, form_data: dict):
         print(form_data)
         self.form_data = form_data
         self.did_submit = True
+        yield
+        await asyncio.sleep(2)
+        self.did_submit = False
+        yield
 
     @rx.var
     def thank_you(self):
@@ -33,7 +39,6 @@ def contact_page() -> rx.Component:
                 rx.input(
                     placeholder="Last Name",
                     name="last_name",
-                    required=True,
                     width="100%",
                 ),
                 width="100%",
@@ -47,7 +52,6 @@ def contact_page() -> rx.Component:
             rx.text_area(
                 placeholder="Message",
                 name="message",
-                required=True,
                 width="100%",
             ),
             rx.button("Submit", type="submit"),
