@@ -16,30 +16,66 @@ class ContactState(rx.State):
 def contact_page() -> rx.Component:
     my_form = rx.form(
         rx.vstack(
-            rx.input(
-                placeholder="First Name",
-                name="first_name",
-                required=True,
-            ),
-            rx.input(
-                placeholder="Last Name",
-                name="last_name",
-                required=True,
+            rx.hstack(
+                rx.input(
+                    placeholder="First Name",
+                    name="first_name",
+                    required=True,
+                    width="100%",
+                ),
+                rx.input(
+                    placeholder="Last Name",
+                    name="last_name",
+                    required=True,
+                    width="100%",
+                ),
+                width="100%",
             ),
             rx.input(
                 placeholder="Email",
                 name="email",
                 type="email",
                 required=True,
+                width="100%",
             ),
             rx.text_area(
                 placeholder="Message",
                 name="message",
                 required=True,
+                width="100%",
             ),
             rx.button("Submit", type="submit"),
         ),
         on_submit=ContactState.handle_submit,
         reset_on_submit=True,
     )
-    return base_page(my_form)
+    my_child = rx.vstack(
+        rx.heading("Contact Us", size="9"),
+        rx.desktop_only(
+            rx.box(
+                my_form,
+                id="my-form-box",
+                width="50vw",
+            )
+        ),
+        rx.tablet_only(
+            rx.box(
+                my_form,
+                id="my-form-box",
+                width="75vw",
+            )
+        ),
+        rx.mobile_only(
+            rx.box(
+                my_form,
+                id="my-form-box",
+                width="85vw",
+            )
+        ),
+        spacing="5",
+        justify="center",
+        align="center",
+        min_height="85vh",
+        id="my-child",
+    )
+    return base_page(my_child)
