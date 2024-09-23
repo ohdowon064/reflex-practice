@@ -1,6 +1,7 @@
 import asyncio
 
 import reflex as rx
+from sqlmodel import Field
 
 from reflex_practice import navigation
 from reflex_practice.ui.base import base_page
@@ -8,8 +9,8 @@ from reflex_practice.ui.base import base_page
 
 class ContactEntryModel(rx.Model, table=True):
     first_name: str
-    last_name: str
-    email: str
+    last_name: str | None = None
+    email: str = Field(nullable=True)
     message: str
 
 
@@ -28,6 +29,7 @@ class ContactState(rx.State):
         self.form_data = form_data
         with rx.session() as session:
             db_entry = ContactEntryModel(**form_data)
+            print(db_entry)
             session.add(db_entry)
             session.commit()
 
