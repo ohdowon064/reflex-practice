@@ -1,10 +1,19 @@
 import asyncio
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 import reflex as rx
+import sqlalchemy
 from sqlmodel import Field
 
 from reflex_practice import navigation
 from reflex_practice.ui.base import base_page
+
+KST = ZoneInfo("Asia/Seoul")
+
+
+def get_kst_now() -> datetime:
+    return datetime.now(KST)
 
 
 class ContactEntryModel(rx.Model, table=True):
@@ -12,6 +21,12 @@ class ContactEntryModel(rx.Model, table=True):
     last_name: str | None = None
     email: str = Field(nullable=True)
     message: str
+    created_at: datetime = Field(
+        default_factory=get_kst_now,
+        sa_type=sqlalchemy.DateTime(timezone=True),
+        sa_column_kwargs={"server_default": sqlalchemy.func.now()},
+        nullable=False,
+    )
 
 
 class ContactState(rx.State):
