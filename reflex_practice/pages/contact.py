@@ -6,6 +6,13 @@ from reflex_practice import navigation
 from reflex_practice.ui.base import base_page
 
 
+class ContactEntryModel(rx.Model, table=True):
+    first_name: str
+    last_name: str
+    email: str
+    message: str
+
+
 class ContactState(rx.State):
     form_data: dict = {}
     did_submit: bool = False
@@ -19,6 +26,11 @@ class ContactState(rx.State):
 
     async def handle_submit(self, form_data: dict):
         self.form_data = form_data
+        with rx.session() as session:
+            db_entry = ContactEntryModel(**form_data)
+            session.add(db_entry)
+            session.commit()
+
         self.did_submit = True
         yield
         await asyncio.sleep(2)
