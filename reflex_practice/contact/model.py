@@ -12,7 +12,7 @@ def get_utc_now() -> datetime:
     return datetime.now(UTC)
 
 
-class Contact(rx.Model, table=True):
+class ContactModel(rx.Model, table=True):
     __tablename__ = "contacts"
 
     user_id: int | None = None

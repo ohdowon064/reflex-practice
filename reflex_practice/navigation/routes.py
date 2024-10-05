@@ -1,4 +1,5 @@
 HOME_ROUTE = "/"
 ABOUT_ROUTE = "/about"
 CONTACT_ROUTE = "/contact"
+CONTACT_LIST_ROUTE = "/contact/list"
 PRICING_ROUTE = "/pricing"

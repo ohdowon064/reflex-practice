@@ -1,13 +1,8 @@
 import reflex as rx
 
-from reflex_practice import navigation
 from reflex_practice.contact.state import ContactState
 
 
-@rx.page(
-    route=navigation.routes.CONTACT_ROUTE,
-    on_load=ContactState.start_timer,
-)
 def contact_form() -> rx.Component:
     return rx.form(
         rx.vstack(

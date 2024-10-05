@@ -1,25 +1,20 @@
 import asyncio
 
 import reflex as rx
+from sqlmodel import select
 
-from reflex_practice.contact.model import Contact
+from reflex_practice.contact.model import ContactModel
 
 
 class ContactState(rx.State):
     form_data: dict = {}
     did_submit: bool = False
-    timeleft: int = 5
-
-    @rx.var
-    def timeleft_label(self):
-        if self.timeleft < 1:
-            return "No Time Left!"
-        return f"{self.timeleft} seconds"
+    contacts: list[ContactModel] = []
 
     async def handle_submit(self, form_data: dict):
         self.form_data = form_data
         with rx.session() as session:
-            db_entry = Contact(**form_data)
+            db_entry = ContactModel(**form_data)
             print(db_entry)
             session.add(db_entry)
             session.commit()
@@ -30,13 +25,14 @@ class ContactState(rx.State):
         self.did_submit = False
         yield
 
-    async def start_timer(self):
-        while self.timeleft > 0:
-            await asyncio.sleep(1)
-            self.timeleft -= 1
-            yield
-
     @rx.var
     def thank_you(self):
         first_name = self.form_data.get("first_name", "")
         return f"Thank you {first_name}".strip() + "!"
+
+    def list_contacts(self):
+        with rx.session() as session:
+            query = select(ContactModel)
+            contacts = session.exec(query).all()
+            self.contacts = contacts
+            print(contacts)
