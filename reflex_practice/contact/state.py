@@ -2,7 +2,7 @@ import asyncio
 
 import reflex as rx
 
-from reflex_practice.contact.model import ContactEntryModel
+from reflex_practice.contact.model import Contact
 
 
 class ContactState(rx.State):
@@ -19,7 +19,7 @@ class ContactState(rx.State):
     async def handle_submit(self, form_data: dict):
         self.form_data = form_data
         with rx.session() as session:
-            db_entry = ContactEntryModel(**form_data)
+            db_entry = Contact(**form_data)
             print(db_entry)
             session.add(db_entry)
             session.commit()
