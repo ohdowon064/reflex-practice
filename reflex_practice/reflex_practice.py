@@ -1,7 +1,11 @@
 import reflex as rx
 
 from reflex_practice import navigation
-from reflex_practice.blog.page import blog_posts_page
+from reflex_practice.blog.page import (
+    blog_posts_page,
+    blog_post_detail_page,
+    create_blog_post_page,
+)
 from reflex_practice.blog.state import BlogPostState
 from reflex_practice.contact.page import create_contact_page, contacts_page
 from reflex_practice.contact.state import ContactState
@@ -60,3 +64,8 @@ app.add_page(
     navigation.routes.BLOG_POSTS_ROUTE,
     on_load=BlogPostState.load_posts,
 )
+# app.add_page(
+#     blog_post_detail_page,
+#     navigation.routes.BLOG_POST_DETAIL_ROUTE,
+# )
+app.add_page(create_blog_post_page, navigation.routes.CREATE_BLOG_POST_ROUTE)
