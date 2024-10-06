@@ -1,6 +1,7 @@
 import reflex as rx
 
 from reflex_practice import navigation
+from reflex_practice.blog.edit import edit_blog_post_page
 from reflex_practice.blog.page import (
     blog_posts_page,
     blog_post_detail_page,
@@ -67,6 +68,11 @@ app.add_page(
 app.add_page(
     blog_post_detail_page,
     navigation.routes.BLOG_POST_DETAIL_ROUTE,
+    on_load=BlogPostState.get_post,
+)
+app.add_page(
+    edit_blog_post_page,
+    navigation.routes.BLOG_POST_EDIT_ROUTE,
     on_load=BlogPostState.get_post,
 )
 app.add_page(create_blog_post_page, navigation.routes.CREATE_BLOG_POST_ROUTE)

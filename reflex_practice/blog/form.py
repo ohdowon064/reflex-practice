@@ -15,10 +15,12 @@ def blog_post_form() -> rx.Component:
             ),
             rx.text_area(
                 placeholder="Content",
+                height="50vh",
                 name="content",
                 width="100%",
             ),
             rx.button("Submit", type="submit"),
+            align="center",
         ),
         on_submit=BlogPostState.create_post,
         reset_on_submit=True,

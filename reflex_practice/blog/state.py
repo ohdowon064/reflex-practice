@@ -1,11 +1,11 @@
 import reflex as rx
 from sqlmodel import select
 
+from reflex_practice import navigation
 from reflex_practice.blog.model import BlogPostModel
 
 
 class BlogPostState(rx.State):
-    post_data: dict = {}
     posts: list[BlogPostModel] = []
     post: BlogPostModel | None = None
 
@@ -29,8 +29,9 @@ class BlogPostState(rx.State):
             post = BlogPostModel(**post_data)
             db_session.add(post)
             db_session.commit()
-
-        yield
+            db_session.refresh(post)
+            self.post = post
+            return navigation.state.NavState.to_blog_detail(post.id)
 
     @rx.var
     def blog_post_id(self):
