@@ -3,7 +3,10 @@ import asyncio
 import reflex as rx
 from sqlmodel import select
 
+from reflex_practice.blog.model import BlogPostModel
 from reflex_practice.contact.model import ContactModel
+
+BlogPostModel
 
 
 class ContactState(rx.State):
@@ -15,7 +18,6 @@ class ContactState(rx.State):
         self.form_data = form_data
         with rx.session() as session:
             db_entry = ContactModel(**form_data)
-            print(db_entry)
             session.add(db_entry)
             session.commit()
 
@@ -35,4 +37,3 @@ class ContactState(rx.State):
             query = select(ContactModel)
             contacts = session.exec(query).all()
             self.contacts = contacts
-            print(contacts)

@@ -1,15 +1,12 @@
-from datetime import datetime, UTC
+from datetime import datetime
 from zoneinfo import ZoneInfo
 
 import reflex as rx
-import sqlalchemy
 from sqlmodel import Field
 
+from reflex_practice.common.model import CreatedAtField
+
 KST = ZoneInfo("Asia/Seoul")
-
-
-def get_utc_now() -> datetime:
-    return datetime.now(UTC)
 
 
 class ContactModel(rx.Model, table=True):
@@ -20,9 +17,4 @@ class ContactModel(rx.Model, table=True):
     last_name: str | None = None
     email: str = Field(nullable=True)
     message: str
-    created_at: datetime = Field(
-        default_factory=get_utc_now,
-        sa_type=sqlalchemy.DateTime(timezone=True),
-        sa_column_kwargs={"server_default": sqlalchemy.func.now()},
-        nullable=False,
-    )
+    created_at: datetime = CreatedAtField
