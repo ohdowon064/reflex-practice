@@ -30,7 +30,6 @@ def blog_post_detail_page() -> rx.Component:
         rx.text(BlogPostState.post.content),
         spacing="5",
         align="center",
-        justify="center",
         min_height="85vh",
     )
     return base_page(my_child)
