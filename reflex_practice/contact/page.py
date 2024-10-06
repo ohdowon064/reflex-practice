@@ -6,7 +6,7 @@ from reflex_practice.contact.state import ContactState
 from reflex_practice.ui.base import base_page
 
 
-def contacts_item_page(contact: ContactModel) -> rx.Component:
+def contact_page(contact: ContactModel) -> rx.Component:
     return rx.box(
         rx.heading(contact.first_name),
         rx.text(contact.message),
@@ -20,7 +20,7 @@ def contacts_page() -> rx.Component:
             rx.heading("Contact List", size="9"),
             rx.foreach(
                 iterable=ContactState.contacts,
-                render_fn=contacts_item_page,
+                render_fn=contact_page,
             ),
             spacing="5",
             justify="center",
@@ -30,7 +30,7 @@ def contacts_page() -> rx.Component:
     )
 
 
-def contact_page() -> rx.Component:
+def create_contact_page() -> rx.Component:
     my_child = rx.vstack(
         rx.heading("Contact Us", size="9"),
         rx.cond(

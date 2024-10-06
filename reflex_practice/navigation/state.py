@@ -15,3 +15,6 @@ class NavState(rx.State):
 
     def to_contact(self):
         return rx.redirect(navigation.routes.CONTACT_ROUTE)
+
+    def to_blog(self):
+        return rx.redirect(navigation.routes.BLOG_POSTS_ROUTE)
