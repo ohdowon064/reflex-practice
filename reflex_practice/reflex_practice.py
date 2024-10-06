@@ -64,8 +64,9 @@ app.add_page(
     navigation.routes.BLOG_POSTS_ROUTE,
     on_load=BlogPostState.load_posts,
 )
-# app.add_page(
-#     blog_post_detail_page,
-#     navigation.routes.BLOG_POST_DETAIL_ROUTE,
-# )
+app.add_page(
+    blog_post_detail_page,
+    navigation.routes.BLOG_POST_DETAIL_ROUTE,
+    on_load=BlogPostState.get_post,
+)
 app.add_page(create_blog_post_page, navigation.routes.CREATE_BLOG_POST_ROUTE)

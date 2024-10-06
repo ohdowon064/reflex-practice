@@ -8,19 +8,32 @@ from reflex_practice.ui.base import base_page
 
 
 def blog_post_page(blog_post: BlogPostModel) -> rx.Component:
-    return rx.box(
+    child = rx.box(
         rx.heading(blog_post.subject),
         padding="1em",
     )
+    return redirect_blog_post_page(child, blog_post)
 
 
-def blog_post_detail_page(child: rx.Component, post: BlogPostModel) -> rx.Component:
+def redirect_blog_post_page(child: rx.Component, post: BlogPostModel) -> rx.Component:
     if post is None or post.id is None:
         return rx.fragment(child)
     return rx.link(
         child,
         href=f"{navigation.routes.BLOG_POSTS_ROUTE}/{post.id}",
     )
+
+
+def blog_post_detail_page() -> rx.Component:
+    my_child = rx.vstack(
+        rx.heading(BlogPostState.post.subject, size="9"),
+        rx.text(BlogPostState.post.content),
+        spacing="5",
+        align="center",
+        justify="center",
+        min_height="85vh",
+    )
+    return base_page(my_child)
 
 
 def create_blog_post_page() -> rx.Component:

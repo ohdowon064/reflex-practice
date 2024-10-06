@@ -16,8 +16,14 @@ class BlogPostState(rx.State):
             posts = session.exec(query).all()
             self.posts = posts
 
-    def get_post(self, post_id: int):
-        pass
+    def get_post(self):
+        with rx.session() as session:
+            if self.blog_post_id is None:
+                self.post = None
+                return
+            query = select(BlogPostModel).where(BlogPostModel.id == self.blog_post_id)
+            post = session.exec(query).one_or_none()
+            self.post = post
 
     def create_post(self, post_data: dict):
         with rx.session() as db_session:
@@ -26,4 +32,7 @@ class BlogPostState(rx.State):
             db_session.commit()
 
         yield
-        rx.redirect(navigation.routes.BLOG_POSTS_ROUTE)
+
+    @rx.var
+    def blog_post_id(self):
+        return self.router.page.params.get("post_id", None)
