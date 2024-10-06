@@ -24,6 +24,11 @@ class BlogPostState(rx.State):
             post = session.exec(query).one_or_none()
             self.post = post
 
+    def to_blog_post_detail(self):
+        if self.post is None:
+            return rx.redirect(navigation.routes.BLOG_POSTS_ROUTE)
+        return rx.redirect(navigation.routes.BLOG_POSTS_ROUTE + f"/{self.post.id}")
+
     def create_post(self, post_data: dict):
         with rx.session() as db_session:
             post = BlogPostModel(**post_data)
@@ -31,7 +36,7 @@ class BlogPostState(rx.State):
             db_session.commit()
             db_session.refresh(post)
             self.post = post
-            return navigation.state.NavState.to_blog_detail(post.id)
+            return self.to_blog_post_detail()
 
     @rx.var
     def blog_post_id(self):

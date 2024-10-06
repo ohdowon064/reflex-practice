@@ -21,9 +21,24 @@ def blog_post_title(post: BlogPostModel) -> rx.Component:
 
 
 def blog_post_detail_page() -> rx.Component:
+    can_edit = True
+    post = BlogPostState.post
+    edit_link = rx.link(
+        rx.button("Edit"),
+        href=navigation.routes.BLOG_POSTS_ROUTE + f"/{post.id}/edit",
+    )
+    edit_link_element = rx.cond(
+        can_edit,
+        edit_link,
+        rx.fragment(),
+    )
     my_child = rx.vstack(
-        rx.heading(BlogPostState.post.subject, size="9"),
-        rx.text(BlogPostState.post.content),
+        rx.hstack(
+            rx.heading(post.subject, size="9"),
+            edit_link_element,
+            align="end",
+        ),
+        rx.text(post.content, white_space="pre-wrap"),
         spacing="5",
         align="center",
         min_height="85vh",

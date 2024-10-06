@@ -7,6 +7,9 @@ from reflex_practice.ui.base import base_page
 
 
 class BlogPostEditFormState(BlogPostState):
+    post_subject: str = ""
+    post_content: str = ""
+
     def handle_submit(self, form_data: dict):
         post_id = self.router.page.params.get("post_id", None)
         if post_id is None:
@@ -21,14 +24,17 @@ class BlogPostEditFormState(BlogPostState):
                 setattr(post, key, value)
             db_session.add(post)
             db_session.commit()
-        return navigation.state.NavState.to_blog_detail(post_id)
+            return self.to_blog_post_detail()
 
 
 def blog_post_edit_form() -> rx.Component:
+    BlogPostEditFormState.post_subject = BlogPostEditFormState.post.subject
+    BlogPostEditFormState.post_content = BlogPostEditFormState.post.content
     return rx.form(
         rx.vstack(
             rx.input(
-                default_value=BlogPostEditFormState.post.subject,
+                default_value=BlogPostEditFormState.post_subject,
+                on_change=BlogPostEditFormState.set_post_subject,
                 placeholder="Subject",
                 name="subject",
                 type="text",
@@ -36,7 +42,8 @@ def blog_post_edit_form() -> rx.Component:
                 width="100%",
             ),
             rx.text_area(
-                value=BlogPostEditFormState.post.content,
+                value=BlogPostEditFormState.post_content,
+                on_change=BlogPostEditFormState.set_post_content,
                 placeholder="Content",
                 height="50vh",
                 name="content",
