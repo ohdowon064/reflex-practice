@@ -3,10 +3,7 @@ import asyncio
 import reflex as rx
 from sqlmodel import select
 
-from reflex_practice.blog.model import BlogPostModel
 from reflex_practice.contact.model import ContactModel
-
-BlogPostModel
 
 
 class ContactState(rx.State):
@@ -32,7 +29,7 @@ class ContactState(rx.State):
         first_name = self.form_data.get("first_name", "")
         return f"Thank you {first_name}".strip() + "!"
 
-    def list_contacts(self):
+    def list_contacts(self) -> None:
         with rx.session() as session:
             query = select(ContactModel)
             contacts = session.exec(query).all()

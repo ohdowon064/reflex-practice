@@ -1,8 +1,11 @@
 import reflex as rx
 
 from reflex_practice import navigation
+from reflex_practice.blog.page import blog_posts_page
+from reflex_practice.blog.state import BlogPostState
+from reflex_practice.contact.page import contact_page, contacts_page
+from reflex_practice.contact.state import ContactState
 from reflex_practice.pages.about import about_page
-from reflex_practice.pages.contact import contact_page
 from reflex_practice.pages.pricing import pricing_page
 from reflex_practice.ui.base import base_page
 from rxconfig import config
@@ -46,3 +49,14 @@ app = rx.App()
 app.add_page(index)
 app.add_page(about_page, navigation.routes.ABOUT_ROUTE)
 app.add_page(pricing_page, navigation.routes.PRICING_ROUTE)
+app.add_page(contact_page, navigation.routes.CONTACT_ROUTE)
+app.add_page(
+    contacts_page,
+    navigation.routes.CONTACT_LIST_ROUTE,
+    on_load=ContactState.list_contacts,
+)
+app.add_page(
+    blog_posts_page,
+    navigation.routes.BLOG_POSTS_ROUTE,
+    on_load=BlogPostState.load_posts,
+)

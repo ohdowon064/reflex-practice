@@ -1,6 +1,5 @@
 import reflex as rx
 
-from reflex_practice import navigation
 from reflex_practice.contact.form import contact_form
 from reflex_practice.contact.model import ContactModel
 from reflex_practice.contact.state import ContactState
@@ -15,7 +14,6 @@ def contacts_item_page(contact: ContactModel) -> rx.Component:
     )
 
 
-@rx.page(route=navigation.routes.CONTACT_LIST_ROUTE, on_load=ContactState.list_contacts)
 def contacts_page() -> rx.Component:
     return base_page(
         rx.vstack(
@@ -32,7 +30,6 @@ def contacts_page() -> rx.Component:
     )
 
 
-@rx.page(route=navigation.routes.CONTACT_ROUTE)
 def contact_page() -> rx.Component:
     my_child = rx.vstack(
         rx.heading("Contact Us", size="9"),
