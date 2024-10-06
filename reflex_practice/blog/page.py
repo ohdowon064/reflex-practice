@@ -25,7 +25,7 @@ def blog_post_detail_page() -> rx.Component:
     post = BlogPostState.post
     edit_link = rx.link(
         rx.button("Edit"),
-        href=navigation.routes.BLOG_POSTS_ROUTE + f"/{post.id}/edit",
+        href=BlogPostState.blog_post_edit_url,
     )
     edit_link_element = rx.cond(
         can_edit,
