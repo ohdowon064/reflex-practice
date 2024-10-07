@@ -6,8 +6,8 @@ from reflex_practice.ui.nav import navbar
 def base_page(
     child: rx.Component,
     hide_navbar: bool = False,
-    *args: tuple[...],
-    **kwargs: dict[...],
+    *args,
+    **kwargs,
 ) -> rx.Component:
     if not isinstance(child, rx.Component):
         child = rx.heading("this is not a valid child element.")
@@ -29,5 +29,7 @@ def base_page(
         ),
         rx.logo(),
         rx.color_mode.button(position="bottom-left", id="light-dark-btn"),
+        *args,
+        **kwargs,
         id="base-container",
     )

@@ -2,6 +2,7 @@ import reflex as rx
 import reflex_local_auth
 
 from reflex_practice import navigation
+from reflex_practice.auth.pages import my_login_page, my_register_page
 from reflex_practice.blog.edit import edit_blog_post_page
 from reflex_practice.blog.page import (
     blog_posts_page,
@@ -55,12 +56,12 @@ app = rx.App()
 app.add_page(index)
 # reflex-local-auth page
 app.add_page(
-    reflex_local_auth.pages.login_page,
+    my_login_page,
     route=reflex_local_auth.routes.LOGIN_ROUTE,
     title="Login",
 )
 app.add_page(
-    reflex_local_auth.pages.register_page,
+    my_register_page,
     route=reflex_local_auth.routes.REGISTER_ROUTE,
     title="Register",
 )
