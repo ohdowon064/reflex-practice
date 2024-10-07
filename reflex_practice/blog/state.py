@@ -8,6 +8,9 @@ from reflex_practice.blog.model import BlogPostModel
 class BlogPostState(rx.State):
     posts: list[BlogPostModel] = []
     post: BlogPostModel | None = None
+    post_subject: str = ""
+    post_content: str = ""
+    post_publish_active: bool = False
 
     def load_posts(self):
         with rx.session() as session:
@@ -23,6 +26,9 @@ class BlogPostState(rx.State):
             query = select(BlogPostModel).where(BlogPostModel.id == self.blog_post_id)
             post = session.exec(query).one_or_none()
             self.post = post
+            self.post_subject = post.subject
+            self.post_content = post.content
+            self.post_publish_active = post.publish_active
 
     @rx.var
     def blog_post_edit_url(self) -> str:

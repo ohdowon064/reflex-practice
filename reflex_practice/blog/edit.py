@@ -1,20 +1,17 @@
 import reflex as rx
 
-from reflex_practice import navigation
 from reflex_practice.blog.model import BlogPostModel
 from reflex_practice.blog.state import BlogPostState
 from reflex_practice.ui.base import base_page
 
 
 class BlogPostEditFormState(BlogPostState):
-    post_subject: str = ""
-    post_content: str = ""
-
     def handle_submit(self, form_data: dict):
         post_id = self.router.page.params.get("post_id", None)
         if post_id is None:
             return
-
+        form_data["publish_active"] = form_data.get("publish_active", False) == "on"
+        print(form_data)
         with rx.session() as db_session:
             query = BlogPostModel.select().where(BlogPostModel.id == post_id)
             post = db_session.exec(query).one_or_none()
@@ -28,8 +25,6 @@ class BlogPostEditFormState(BlogPostState):
 
 
 def blog_post_edit_form() -> rx.Component:
-    BlogPostEditFormState.post_subject = BlogPostEditFormState.post.subject
-    BlogPostEditFormState.post_content = BlogPostEditFormState.post.content
     return rx.form(
         rx.vstack(
             rx.input(
@@ -48,6 +43,33 @@ def blog_post_edit_form() -> rx.Component:
                 height="50vh",
                 name="content",
                 width="100%",
+            ),
+            rx.flex(
+                rx.switch(
+                    default_checked=BlogPostEditFormState.post_publish_active,
+                    on_change=BlogPostEditFormState.set_post_publish_active,
+                    name="publish_active",
+                ),
+                rx.text("Publish Active"),
+                spacing="2",
+            ),
+            rx.cond(
+                BlogPostEditFormState.post_publish_active,
+                rx.box(
+                    rx.hstack(
+                        rx.input(
+                            type="date",
+                            name="publish_date",
+                            width="100%",
+                        ),
+                        rx.input(
+                            type="time",
+                            name="publish_time",
+                            width="100%",
+                        ),
+                    ),
+                    width="100%",
+                ),
             ),
             rx.button("Submit", type="submit"),
             align="center",

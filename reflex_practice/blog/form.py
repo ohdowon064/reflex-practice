@@ -19,6 +19,11 @@ def blog_post_form() -> rx.Component:
                 name="content",
                 width="100%",
             ),
+            rx.flex(
+                rx.switch(default_checked=True, name="publish_active"),
+                rx.text("Publish Active"),
+                spacing="2",
+            ),
             rx.button("Submit", type="submit"),
             align="center",
         ),

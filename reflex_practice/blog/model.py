@@ -12,6 +12,7 @@ class BlogPostModel(rx.Model, table=True):
 
     subject: str
     content: str
+    publish_active: bool = False
 
     created_at: datetime = Field(
         default_factory=get_utc_now,
