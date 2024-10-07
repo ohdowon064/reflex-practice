@@ -13,6 +13,11 @@ class BlogPostModel(rx.Model, table=True):
     subject: str
     content: str
     publish_active: bool = False
+    publish_datetime: datetime | None = Field(
+        default=None,
+        sa_type=sqlalchemy.DateTime(timezone=True),
+        nullable=True,
+    )
 
     created_at: datetime = Field(
         default_factory=get_utc_now,

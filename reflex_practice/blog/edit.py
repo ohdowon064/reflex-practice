@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import reflex as rx
 
 from reflex_practice.blog.model import BlogPostModel
@@ -6,12 +8,33 @@ from reflex_practice.ui.base import base_page
 
 
 class BlogPostEditFormState(BlogPostState):
+    @rx.var
+    def publish_display_date(self) -> str:
+        if self.post is None or self.post.publish_datetime is None:
+            return datetime.now().strftime("%Y-%m-%d")
+        return self.post.publish_datetime.strftime("%Y-%m-%d")
+
+    @rx.var
+    def publish_display_time(self) -> str:
+        if self.post is None or self.post.publish_datetime is None:
+            return datetime.now().strftime("%H:%M")
+        return self.post.publish_datetime.strftime("%H:%M")
+
     def handle_submit(self, form_data: dict):
         post_id = self.router.page.params.get("post_id", None)
         if post_id is None:
             return
         form_data["publish_active"] = form_data.get("publish_active", False) == "on"
         print(form_data)
+        pub_date = form_data.pop("publish_date", "")
+        pub_time = form_data.pop("publish_time", "")
+        publish_datetime = f"{pub_date} {pub_time}"
+        try:
+            form_data["publish_datetime"] = datetime.strptime(
+                publish_datetime, "%Y-%m-%d %H:%M"
+            )
+        except:
+            form_data["publish_datetime"] = None
         with rx.session() as db_session:
             query = BlogPostModel.select().where(BlogPostModel.id == post_id)
             post = db_session.exec(query).one_or_none()
@@ -58,11 +81,13 @@ def blog_post_edit_form() -> rx.Component:
                 rx.box(
                     rx.hstack(
                         rx.input(
+                            default_value=BlogPostEditFormState.publish_display_date,
                             type="date",
                             name="publish_date",
                             width="100%",
                         ),
                         rx.input(
+                            default_value=BlogPostEditFormState.publish_display_time,
                             type="time",
                             name="publish_time",
                             width="100%",
@@ -72,7 +97,6 @@ def blog_post_edit_form() -> rx.Component:
                 ),
             ),
             rx.button("Submit", type="submit"),
-            align="center",
         ),
         on_submit=BlogPostEditFormState.handle_submit,
     )
