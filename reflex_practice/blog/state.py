@@ -1,5 +1,4 @@
 import reflex as rx
-from sqlmodel import select
 
 from reflex_practice import navigation
 from reflex_practice.blog.model import BlogPostModel

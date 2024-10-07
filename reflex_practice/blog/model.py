@@ -37,9 +37,14 @@ class BlogPostModel(rx.Model, table=True):
     )
 
     @classmethod
-    def find_all(cls) -> list[Self]:
+    def find_all(cls, only_active: bool = True) -> list[Self]:
         with rx.session() as session:
-            query = cls.select().where(cls.publish_active)
+            query = cls.select()
+            if only_active:
+                query = query.where(
+                    cls.publish_active,
+                    cls.publish_datetime <= get_utc_now(),
+                )
             return session.exec(query).all()
 
     @classmethod
@@ -56,3 +61,15 @@ class BlogPostModel(rx.Model, table=True):
             session.commit()
             session.refresh(post)
             return post
+
+    @classmethod
+    def update(cls, post_id: int, data: dict) -> None:
+        with rx.session() as db_session:
+            query = BlogPostModel.select().where(BlogPostModel.id == post_id)
+            post = db_session.exec(query).one_or_none()
+            if post is None:
+                return
+            for key, value in data.items():
+                setattr(post, key, value)
+            db_session.add(post)
+            db_session.commit()

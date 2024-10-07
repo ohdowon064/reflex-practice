@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 import reflex as rx
 
@@ -25,26 +25,18 @@ class BlogPostEditFormState(BlogPostState):
         if post_id is None:
             return
         form_data["publish_active"] = form_data.get("publish_active", False) == "on"
-        print(form_data)
         pub_date = form_data.pop("publish_date", "")
         pub_time = form_data.pop("publish_time", "")
         publish_datetime = f"{pub_date} {pub_time}"
         try:
             form_data["publish_datetime"] = datetime.strptime(
                 publish_datetime, "%Y-%m-%d %H:%M"
-            )
+            ).astimezone(timezone.utc)
         except:
             form_data["publish_datetime"] = None
-        with rx.session() as db_session:
-            query = BlogPostModel.select().where(BlogPostModel.id == post_id)
-            post = db_session.exec(query).one_or_none()
-            if post is None:
-                return
-            for key, value in form_data.items():
-                setattr(post, key, value)
-            db_session.add(post)
-            db_session.commit()
-            return self.to_blog_post_detail()
+        print(form_data)
+        BlogPostModel.update(post_id, form_data)
+        return self.to_blog_post_detail()
 
 
 def blog_post_edit_form() -> rx.Component:
