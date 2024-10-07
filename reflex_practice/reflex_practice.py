@@ -1,4 +1,5 @@
 import reflex as rx
+import reflex_local_auth
 
 from reflex_practice import navigation
 from reflex_practice.blog.edit import edit_blog_post_page
@@ -52,6 +53,18 @@ def index() -> rx.Component:
 
 app = rx.App()
 app.add_page(index)
+# reflex-local-auth page
+app.add_page(
+    reflex_local_auth.pages.login_page,
+    route=reflex_local_auth.routes.LOGIN_ROUTE,
+    title="Login",
+)
+app.add_page(
+    reflex_local_auth.pages.register_page,
+    route=reflex_local_auth.routes.REGISTER_ROUTE,
+    title="Register",
+)
+
 app.add_page(about_page, navigation.routes.ABOUT_ROUTE)
 app.add_page(pricing_page, navigation.routes.PRICING_ROUTE)
 app.add_page(create_contact_page, navigation.routes.CONTACT_ROUTE)
