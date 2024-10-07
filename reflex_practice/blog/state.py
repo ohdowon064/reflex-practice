@@ -13,22 +13,17 @@ class BlogPostState(rx.State):
     post_publish_active: bool = False
 
     def load_posts(self):
-        with rx.session() as session:
-            query = select(BlogPostModel)
-            posts = session.exec(query).all()
-            self.posts = posts
+        self.posts = BlogPostModel.find_all()
 
     def get_post(self):
-        with rx.session() as session:
-            if self.blog_post_id is None:
-                self.post = None
-                return
-            query = select(BlogPostModel).where(BlogPostModel.id == self.blog_post_id)
-            post = session.exec(query).one_or_none()
-            self.post = post
-            self.post_subject = post.subject
-            self.post_content = post.content
-            self.post_publish_active = post.publish_active
+        post_id = self.blog_post_id
+        if post_id is None:
+            self.post = None
+            return
+        self.post = BlogPostModel.find_one(post_id)
+        self.post_subject = self.post.subject
+        self.post_content = self.post.content
+        self.post_publish_active = self.post.publish_active
 
     @rx.var
     def blog_post_edit_url(self) -> str:
@@ -44,14 +39,9 @@ class BlogPostState(rx.State):
         return rx.redirect(navigation.routes.BLOG_POSTS_ROUTE + f"/{self.post.id}")
 
     def create_post(self, post_data: dict):
-        with rx.session() as db_session:
-            post = BlogPostModel(**post_data)
-            db_session.add(post)
-            db_session.commit()
-            db_session.refresh(post)
-            self.post = post
-            return self.to_blog_post_detail()
+        self.post = BlogPostModel.create(post_data)
+        return self.to_blog_post_detail()
 
     @rx.var
-    def blog_post_id(self):
+    def blog_post_id(self) -> int | None:
         return self.router.page.params.get("post_id", None)

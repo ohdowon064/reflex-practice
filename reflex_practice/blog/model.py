@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Self
 
 import reflex as rx
 import sqlalchemy
@@ -34,3 +35,24 @@ class BlogPostModel(rx.Model, table=True):
         },
         nullable=False,
     )
+
+    @classmethod
+    def find_all(cls) -> list[Self]:
+        with rx.session() as session:
+            query = cls.select().where(cls.publish_active)
+            return session.exec(query).all()
+
+    @classmethod
+    def find_one(cls, post_id: int) -> Self | None:
+        with rx.session() as session:
+            query = cls.select().where(cls.id == post_id)
+            return session.exec(query).one_or_none()
+
+    @classmethod
+    def create(cls, data: dict) -> Self:
+        with rx.session() as session:
+            post = cls(**data)
+            session.add(post)
+            session.commit()
+            session.refresh(post)
+            return post
